@@ -1,0 +1,537 @@
+<!doctype html>digital-entertainment-conseil.fr
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Digital Entertainment & Conseil – Culture, citoyenneté & innovation</title>
+  <meta name="description" content="Digital Entertainment & Conseil – ateliers citoyens, culturels et numériques pour la jeunesse, les familles et les quartiers. Agir, créer et apprendre ensemble à Montceau-les-Mines et dans tout le territoire.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Digital Entertainment & Conseil">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="Digital Entertainment & Conseil">
+  <meta property="og:description" content="Ateliers citoyens, culturels et numériques pour la jeunesse et les quartiers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://digital.entertainment-conseil.fr">
+  <meta property="og:image" content="https://digital.entertainment-conseil.fr/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Digital Entertainment & Conseil">
+  <meta name="twitter:description" content="Agir, créer et apprendre ensemble – ateliers et événements citoyens.">
+
+  <!-- Icons -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React / ReactDOM UMD -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- React Router DOM UMD -->
+  <script crossorigin src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.production.min.js"></script>
+
+  <!-- Framer Motion UMD -->
+  <script crossorigin src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
+
+  <!-- Styles additionnels -->
+  <style>
+    :root{
+      --navy:#0b1222; --navy2:#0b1a3a; --cyan:#33b1ff; --cyanSoft:#8bd3ff;
+    }
+    html,body,#root{height:100%}
+    /* Dégradé animé global (léger, institutionnel) */
+    .bg-animated{
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(51,177,255,0.10), transparent 60%),
+        radial-gradient(1000px 500px at 90% 0%, rgba(139,211,255,0.10), transparent 60%),
+        linear-gradient(180deg, var(--navy2), var(--navy));
+      position: relative;
+      overflow-x: hidden;
+      isolation: isolate;
+    }
+    .bg-animated::before{
+      content:"";
+      position:absolute; inset:-20%;
+      background: radial-gradient(40% 30% at 70% 20%, rgba(51,177,255,0.30), transparent 60%),
+                  radial-gradient(35% 25% at 20% 80%, rgba(139,211,255,0.18), transparent 60%);
+      filter: blur(40px);
+      animation: floatGlow 12s linear infinite alternate;
+      z-index:-1;
+    }
+    @keyframes floatGlow{
+      0%{transform: translate3d(0,0,0) scale(1)}
+      100%{transform: translate3d(-2%,2%,0) scale(1.03)}
+    }
+    /* Boutons */
+    .btn-primary{background:var(--cyan); color:#0b1222}
+    .btn-primary:hover{background:#5cc2ff}
+    .btn-ghost{border:1px solid rgba(51,177,255,.5); color:#e6f7ff}
+    .btn-ghost:hover{background:rgba(255,255,255,.06)}
+    /* Cartes */
+    .card{background: rgba(255,255,255,.04); border:1px solid rgba(51,177,255,.25)}
+    .card:hover{box-shadow: 0 0 40px -20px rgba(51,177,255,.6)}
+    /* Lien cyan permanent (Instagram) */
+    .link-cyan{color:var(--cyan)}
+    .link-cyan:hover{text-shadow:0 0 6px rgba(51,177,255,.6)}
+    /* Header flou */
+    .glass{backdrop-filter: blur(10px); background: rgba(9,17,35,.6)}
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-100 bg-animated">
+<div id="root"></div>
+
+<!-- APP SCRIPT -->
+<script type="text/javascript">
+(() => {
+  const { useState, useEffect, Fragment } = React;
+  const { createRoot } = ReactDOM;
+  const { HashRouter, Routes, Route, NavLink, Link, useLocation } = ReactRouterDOM;
+  const { motion } = window["framer-motion"];
+
+  // ---------- UI helpers ----------
+  const cn = (...c) => c.filter(Boolean).join(" ");
+  const Page = ({children}) => <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">{children}</main>;
+
+  // ---------- Splash (1s) ----------
+  function Splash() {
+    return (
+      React.createElement(motion.div, {
+        className:"fixed inset-0 flex items-center justify-center",
+        style:{ background:"#0b1222" },
+        initial:{ opacity:1 }, animate:{ opacity:0 }, transition:{ duration:1 }
+      },
+        React.createElement(motion.img, {
+          src:"logo.png", alt:"DEC",
+          className:"w-28 h-28 rounded-xl",
+          initial:{ scale:.8, opacity:0 }, animate:{ scale:1, opacity:1 }, transition:{ duration:.8 }
+        })
+      )
+    );
+  }
+
+  // ---------- Header ----------
+  function Header(){
+    const [open,setOpen]=useState(false);
+    const linkClass = ({isActive}) => cn(
+      "px-4 py-2 rounded-full transition",
+      isActive ? "bg-cyan-500 text-slate-900" : "text-cyan-100 hover:bg-white/10 hover:text-white"
+    );
+    return (
+      <header className="sticky top-0 z-50 border-b border-cyan-900/40 glass">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="logo.png" alt="DEC" className="h-9 w-9 rounded-lg ring-1 ring-cyan-500/30"/>
+            <div className="leading-tight">
+              <div className="font-semibold text-white">Digital Entertainment & Conseil</div>
+              <div className="text-xs text-cyan-200/80">Ateliers & Événements Citoyens</div>
+            </div>
+          </Link>
+          <nav className="hidden md:flex items-center gap-2">
+            <NavLink to="/" end className={linkClass}>Accueil</NavLink>
+            <NavLink to="/ateliers" className={linkClass}>Ateliers</NavLink>
+            <NavLink to="/evenements" className={linkClass}>Événements</NavLink>
+            <NavLink to="/contact" className={linkClass}>Contact</NavLink>
+            <a className="ml-2 link-cyan" href="https://instagram.com/digitalconseilfr" target="_blank" rel="noreferrer" aria-label="Instagram">@digitalconseilfr</a>
+          </nav>
+          <button className="md:hidden p-2 rounded-lg hover:bg-white/10" onClick={()=>setOpen(s=>!s)} aria-label="Menu">
+            <span className="text-cyan-200">{open ? "✕" : "☰"}</span>
+          </button>
+        </div>
+        {open && (
+          <div className="md:hidden border-t border-cyan-900/40 bg-slate-900/85">
+            <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col">
+              <NavLink to="/" end className={linkClass} onClick={()=>setOpen(false)}>Accueil</NavLink>
+              <NavLink to="/ateliers" className={linkClass} onClick={()=>setOpen(false)}>Ateliers</NavLink>
+              <NavLink to="/evenements" className={linkClass} onClick={()=>setOpen(false)}>Événements</NavLink>
+              <NavLink to="/contact" className={linkClass} onClick={()=>setOpen(false)}>Contact</NavLink>
+              <a className="mt-1 link-cyan" href="https://instagram.com/digitalconseilfr" target="_blank" rel="noreferrer">@digitalconseilfr</a>
+            </div>
+          </div>
+        )}
+      </header>
+    );
+  }
+
+  // ---------- Hero ----------
+  function Hero(){
+    return (
+      <section className="pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            {React.createElement(motion.h1, {
+              initial:{ opacity:0, y:20 }, animate:{ opacity:1, y:0 }, transition:{ duration:.6 },
+              className:"text-4xl md:text-5xl font-extrabold text-white"
+            }, "Culture, citoyenneté ",
+               React.createElement("span", {className:"text-cyan-300"}, "& innovation "),
+               "au service du territoire"
+            )}
+            <p className="mt-5 text-lg text-cyan-100/85">
+              Programmes citoyens, éducatifs et culturels pour écoles, collectivités et structures publiques — organisables toute l’année.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link to="/ateliers" className="btn-primary inline-flex items-center gap-2 px-5 py-3 rounded-full">Découvrir nos ateliers →</Link>
+              <Link to="/evenements" className="btn-ghost inline-flex items-center gap-2 px-5 py-3 rounded-full">Voir nos événements</Link>
+            </div>
+
+            <div className="mt-6 card rounded-2xl p-4">
+              <div className="text-sm text-cyan-300 mb-1">Réseaux</div>
+              <a className="link-cyan text-sm" href="https://instagram.com/digitalconseilfr" target="_blank" rel="noreferrer">📸 Suivez-nous sur Instagram : @digitalconseilfr</a>
+            </div>
+          </div>
+
+          {React.createElement(motion.div, {
+            initial:{ opacity:0, y:20 }, animate:{ opacity:1, y:0 }, transition:{ duration:.6, delay:.1 },
+            className:"aspect-video rounded-2xl overflow-hidden border border-cyan-900/40 shadow-[0_0_80px_-20px_rgba(51,177,255,0.5)] relative"
+          },
+            React.createElement("img", {src:"hero-bg.webp", alt:"Hero DEC", className:"w-full h-full object-cover blur-sm"}),
+            React.createElement("div", {className:"absolute inset-0 grid place-items-center"},
+              React.createElement("img",{src:"logo.png", alt:"Logo DEC", className:"w-28 h-28 rounded-xl shadow-lg"})
+            )
+          )}
+        </div>
+      </section>
+    );
+  }
+
+  // ---------- Accueil (arguments/sections) ----------
+  function Accueil(){
+    const items = [
+      "Ateliers sécurisés et encadrés",
+      "Adaptés écoles, collèges & grand public",
+      "Partenariats institutionnels",
+      "Évaluations & livrables inclus"
+    ];
+    return (
+      <Page>
+        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {items.map((t,i)=>(
+            React.createElement(motion.div, { key:i, className:"card rounded-xl p-4", initial:{opacity:0,y:20}, whileInView:{opacity:1,y:0}, viewport:{once:true}, transition:{duration:.5, delay:i*0.05}},
+              React.createElement("div",{className:"text-cyan-300 text-sm mb-1"},"Atout"),
+              React.createElement("div",{className:"text-cyan-100"},t)
+            )
+          ))}
+        </div>
+      </Page>
+    );
+  }
+
+  // ---------- Ateliers (toutes catégories) ----------
+  function Ateliers(){
+    const categories = [
+      { title:"Ateliers Citoyens & Éducatifs", items:[
+        "Ma Ville Propre – propreté, tri, responsabilité citoyenne.",
+        "Citoyen en Uniforme – rencontre police, pompiers, agents.",
+        "Stop Harcèlement ! – prévention & respect mutuel.",
+        "Théâtre-Forum “Vivre Ensemble” – jeux de rôle & médiation.",
+        "Jeunes Acteurs Citoyens – micro-projets civiques.",
+        "Ma Mairie & Moi – institutions & démocratie locale.",
+        "Initiation à la Conduite Responsable – simulateur sécurité routière.",
+        "Services Publics en Action – métiers du service public (SDIS, mairie, police).",
+        "Éducation Civique & Valeurs Républicaines – échanges & débats.",
+        "Initiation au Secourisme Citoyen – gestes qui sauvent."
+      ]},
+      { title:"Ateliers Culturels, Artistiques & d’Expression", items:[
+        "Voix de Quartier – écriture, slam, rap citoyen.",
+        "Street Art & Identité Locale – fresques participatives.",
+        "Photo & Vidéo Citoyenne – reportage & montage.",
+        "Théâtre & Confiance en soi – expression scénique.",
+        "Danse Urbaine & Expression Libre – hip-hop, breakdance.",
+        "Atelier BD & Illustration – vivre-ensemble en images.",
+        "Podcast & Radio Locale – journalisme participatif.",
+        "Écriture Créative – imagination & réflexion sociale.",
+        "Exposition “Nos Quartiers en Couleurs”.",
+        "Mini-Musée de Quartier – mémoire locale."
+      ]},
+      { title:"Ateliers Familles, Mamans & Parentalité", items:[
+        "Paroles de Mamans – café-discussion.",
+        "Café des Parents & Éducation Positive.",
+        "Parents Connectés – numérique & écrans.",
+        "Couture & Recyclage Textile.",
+        "Cuisine du Monde – liens & interculturel.",
+        "Maman & Bébé – bien-être & détente.",
+        "Café Citoyen des Familles.",
+        "Théâtre des Mamans – estime & humour.",
+        "Équilibre Vie Pro / Vie Familiale.",
+        "Atelier Femmes Inspirantes."
+      ]},
+      { title:"Ateliers Bien-Être, Santé & Développement Personnel", items:[
+        "Bien-Être Citoyen – relaxation & estime.",
+        "Ostéopathie & Naturopathie – prévention.",
+        "Yoga Doux & Respiration.",
+        "Gestion du Stress & Émotions.",
+        "Sport Santé Citoyen – marche & fitness doux.",
+        "Alimentation Équilibrée à Petit Budget.",
+        "Estime de Soi Jeunes.",
+        "Massages & Relaxation Découverte.",
+        "Sommeil & Sérénité.",
+        "Cohérence Cardiaque & Respiration Positive."
+      ]},
+      { title:"Ateliers Numériques & Innovation", items:[
+        "Journée Connectée – seniors & familles.",
+        "Culture Gaming & Réalité Virtuelle.",
+        "Métiers du Numérique – orientation.",
+        "Montage Vidéo & Création de Contenu.",
+        "Informatique Pratique pour Tous.",
+        "Prévention Numérique Jeunesse.",
+        "Impression 3D & Objets Connectés.",
+        "Simulation de Vol & 3D.",
+        "Robotique Ludique.",
+        "Création de Site ou Blog Local."
+      ]},
+      { title:"Ateliers Environnement & Écologie", items:[
+        "Mon Quartier Vert – nettoyage citoyen.",
+        "Art & Recyclage – création upcycling.",
+        "Jardin Partagé – potager collectif.",
+        "Zéro Déchet au Quotidien – produits ménagers naturels.",
+        "Éco-Challenge Citoyen – actions de réduction.",
+        "Nature & Biodiversité – plantes locales.",
+        "Recyclage Numérique – matériel durable.",
+        "Énergies Renouvelables – mini-projets solaires.",
+        "DIY “Répare ton Objet”.",
+        "Mobilité Verte – vélo & transport responsable."
+      ]}
+    ];
+
+    return (
+      <Page>
+        <h1 className="text-3xl font-extrabold text-white">Nos Ateliers</h1>
+        <p className="mt-3 text-cyan-100/85">Formats flexibles (journée, demi-journée, 2–3h) — organisables <strong>toute l’année</strong>. Cliquez pour nous contacter.</p>
+        <div className="mt-10 space-y-10">
+          {categories.map((cat,idx)=>(
+            <section key={cat.title} className="card rounded-2xl p-6">
+              {React.createElement(motion.h2, {className:"text-xl font-semibold text-white",
+                initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:true},transition:{duration:.5, delay:idx*.05}}, cat.title)}
+              <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {cat.items.map((it,i)=>(
+                  React.createElement(motion.div,{key:it,className:"rounded-xl p-4 bg-slate-950/40 border border-cyan-900/40",
+                    initial:{opacity:0,y:16},whileInView:{opacity:1,y:0},viewport:{once:true},transition:{duration:.45, delay:i*.02}},
+                    React.createElement("div",{className:"text-sm text-cyan-300 mb-1"},"Atelier"),
+                    React.createElement("div",{className:"text-cyan-100"},it),
+                    React.createElement(Link,{to:"/contact",className:"mt-2 inline-flex items-center gap-1 text-sm font-medium link-cyan"},"Demander cet atelier →")
+                  )
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </Page>
+    );
+  }
+
+  // ---------- Événements ----------
+  function Evenements(){
+    const groups = [
+      { title:"Citoyenneté & Jeunesse", items:[
+        "Ride & Respect – Journée Motocross Citoyenne",
+        "CAN des Quartiers – tournoi sportif interquartiers",
+        "Urban Day – Culture Urbaine & Solidarité",
+        "Voix de Quartier Live – concert citoyen",
+        "Gaming & VR Fest – tournois & technologies immersives",
+        "Journée Stop Harcèlement – théâtre & ateliers",
+        "Forum Jeunesse & Citoyenneté – jeunes, élus, associations",
+        "Semaine des Métiers du Service Public",
+        "Fresque Citoyenne des Quartiers – œuvre murale",
+        "Forum Sécurité & Prévention Routière"
+      ]},
+      { title:"Familles, Mamans & Bien-Être", items:[
+        "Forum Familles & Éducation Positive",
+        "Journée Santé Naturelle & Bien-Être",
+        "Café Citoyen des Mamans",
+        "Fête des Familles & de la Solidarité",
+        "Ateliers “Maman et Bien-Être”",
+        "Salon du Bien-Être & des Métiers d’Avenir",
+        "Forum Parentalité & Équilibre de Vie",
+        "Ciné-Débat “Parent & Enfant à l’ère du numérique”",
+        "Festival des Mamans Créatives",
+        "Atelier Mode & Confiance en Soi"
+      ]},
+      { title:"Seniors & Intergénérationnel", items:[
+        "Journée Connectée Intergénérationnelle",
+        "Bal Citoyen des Générations",
+        "Souvenirs d’Ici – Exposition Mémoire Locale",
+        "Rencontre “Jeunes & Aînés Solidaires”",
+        "Café Mémoire et Partage d’Histoires",
+        "Atelier Cuisine des Temps Passés",
+        "Fête des Générations – musique & partage",
+        "Randonnée Douce Citoyenne",
+        "Tournoi de jeux de société",
+        "Atelier Récit de Vie"
+      ]},
+      { title:"Culture, Diversité & Divertissement", items:[
+        "Festival “Nos Quartiers en Fête”",
+        "Ciné Plein Air Citoyen",
+        "Talents de Nos Quartiers – musique, humour, danse",
+        "Summer Party des Quartiers",
+        "Trophées de l’Engagement Jeune",
+        "Concerts & Cultures Urbaines",
+        "Soirée Théâtre & Slam Citoyen",
+        "Journée “Culture & Diversité”",
+        "Fête des Arts de Rue",
+        "Battle d’Improvisation"
+      ]},
+      { title:"Écologie & Solidarité", items:[
+        "Journée Éco-Quartiers",
+        "Randonnée Verte Citoyenne",
+        "Marché Solidaire & Créatif",
+        "Forum de la Transition Écologique",
+        "Fête du Jardin Partagé",
+        "Journée du Recyclage et du Réemploi",
+        "Opération “Quartier Propre Ensemble”",
+        "Atelier Collectif Zéro Déchet",
+        "Collecte Solidaire & Trocs Locaux",
+        "Journée de la Solidarité Citoyenne"
+      ]}
+    ];
+
+    return (
+      <Page>
+        <h1 className="text-3xl font-extrabold text-white">Événements & Actions Citoyennes</h1>
+        <p className="mt-3 text-cyan-100/85">Programmables <strong>à tout moment de l’année</strong>. Chaque carte mène au formulaire de contact.</p>
+        <div className="mt-10 space-y-10">
+          {groups.map((g,idx)=>(
+            <section key={g.title} className="card rounded-2xl p-6">
+              {React.createElement(motion.h2,{className:"text-xl font-semibold text-white",
+                initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:true},transition:{duration:.5, delay:idx*.05}}, g.title)}
+              <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {g.items.map((it,i)=>(
+                  React.createElement(motion.div,{key:it,className:"rounded-xl p-4 bg-slate-950/40 border border-cyan-900/40",
+                    initial:{opacity:0,y:16},whileInView:{opacity:1,y:0},viewport:{once:true},transition:{duration:.45, delay:i*.02}},
+                    React.createElement("div",{className:"text-sm text-cyan-300 mb-1"},"Événement"),
+                    React.createElement("div",{className:"text-cyan-100"},it),
+                    React.createElement(Link,{to:"/contact",className:"mt-2 inline-flex items-center gap-1 text-sm font-medium link-cyan"},"Organiser cet événement →")
+                  )
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </Page>
+    );
+  }
+
+  // ---------- Contact ----------
+  function Contact(){
+    return (
+      <Page>
+        <h1 className="text-3xl font-extrabold text-white">Contact</h1>
+        <p className="mt-3 text-cyan-100/85">Écrivez-nous pour organiser un atelier, un événement ou obtenir une information.</p>
+
+        <div className="mt-8 grid lg:grid-cols-2 gap-8">
+          <div className="card rounded-2xl p-6">
+            <h2 className="font-semibold text-white">Coordonnées</h2>
+            <ul className="mt-3 text-sm text-cyan-100/90 space-y-2">
+              <li>📧 digital.entertainment.conseil@outlook.fr</li>
+              <li>📞 07 75 76 49 28</li>
+              <li>📍 1 Rue du Petit Bois, 71300 Montceau-les-Mines</li>
+              <li>📸 Instagram : <a className="link-cyan" href="https://instagram.com/digitalconseilfr" target="_blank" rel="noreferrer">@digitalconseilfr</a></li>
+            </ul>
+          </div>
+
+          <form action="https://formspree.io/f/mwkgnkgb" method="POST" className="card rounded-2xl p-6">
+            <h2 className="font-semibold text-white">Formulaire de contact</h2>
+            <label className="block mt-3 text-sm">
+              <span className="text-cyan-100">Nom et prénom</span>
+              <input name="name" required className="mt-1 w-full rounded-xl border border-cyan-900/40 bg-slate-950/60 px-3 py-2 text-cyan-100 placeholder:text-cyan-200/40" placeholder="Votre nom"/>
+            </label>
+            <label className="block mt-3 text-sm">
+              <span className="text-cyan-100">Email</span>
+              <input type="email" name="email" required className="mt-1 w-full rounded-xl border border-cyan-900/40 bg-slate-950/60 px-3 py-2 text-cyan-100 placeholder:text-cyan-200/40" placeholder="votre@email.fr"/>
+            </label>
+            <label className="block mt-3 text-sm">
+              <span className="text-cyan-100">Message</span>
+              <textarea name="message" rows="6" required className="mt-1 w-full rounded-xl border border-cyan-900/40 bg-slate-950/60 px-3 py-2 text-cyan-100 placeholder:text-cyan-200/40" placeholder="Votre demande : atelier, événement, information..."></textarea>
+            </label>
+            <button type="submit" className="mt-4 btn-primary inline-flex items-center gap-2 px-5 py-3 rounded-full">Envoyer →</button>
+          </form>
+        </div>
+      </Page>
+    );
+  }
+
+  // ---------- Mentions légales ----------
+  function Mentions(){
+    return (
+      <Page>
+        <h1 className="text-3xl font-extrabold text-white">Mentions légales & Politique de confidentialité</h1>
+        <div className="mt-6 space-y-4 text-cyan-100/90">
+          <p><strong>Éditeur :</strong> Digital Entertainment & Conseil — 1 Rue du Petit Bois, 71300 Montceau-les-Mines — 07 75 76 49 28 — digital.entertainment.conseil@outlook.fr — Représentant légal : Frédéric Loubao.</p>
+          <p><strong>Hébergement :</strong> Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA — vercel.com.</p>
+          <p><strong>Données :</strong> Les informations envoyées via le formulaire servent uniquement à traiter votre demande et ne sont jamais cédées. Conservation max : 12 mois. Vous pouvez demander l’accès/suppression à l’adresse : digital.entertainment.conseil@outlook.fr</p>
+          <p><strong>Cookies :</strong> Uniquement techniques, aucun cookie publicitaire.</p>
+          <p className="text-xs text-cyan-200/80">Dernière mise à jour : 2025</p>
+        </div>
+      </Page>
+    );
+  }
+
+  // ---------- Footer ----------
+  function Footer(){
+    return (
+      <footer className="mt-20 border-t border-cyan-900/40 bg-slate-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid gap-6 md:grid-cols-3">
+          <div>
+            <img src="logo.png" alt="DEC" className="h-10 w-10 mb-3 rounded-lg ring-1 ring-cyan-500/30"/>
+            <p className="text-sm text-cyan-100/80">Ateliers & événements citoyens, éducatifs et culturels — organisables toute l’année.</p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-white mb-3">Navigation</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/" className="hover:underline text-cyan-100">Accueil</Link></li>
+              <li><Link to="/ateliers" className="hover:underline text-cyan-100">Ateliers</Link></li>
+              <li><Link to="/evenements" className="hover:underline text-cyan-100">Événements</Link></li>
+              <li><Link to="/contact" className="hover:underline text-cyan-100">Contact</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-white mb-3">Coordonnées</h4>
+            <ul className="space-y-2 text-sm text-cyan-100">
+              <li>📧 digital.entertainment.conseil@outlook.fr</li>
+              <li>📞 07 75 76 49 28</li>
+              <li>📍 1 Rue du Petit Bois, 71300 Montceau-les-Mines</li>
+              <li>📸 <a className="link-cyan" href="https://instagram.com/digitalconseilfr" target="_blank" rel="noreferrer">@digitalconseilfr</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-cyan-900/40 text-center py-5 text-xs text-cyan-200">
+          © 2025 Digital Entertainment & Conseil — Tous droits réservés. •
+          <Link to="/mentions-legales" className="ml-1 underline decoration-cyan-400/60">Mentions légales</Link>
+        </div>
+      </footer>
+    );
+  }
+
+  // ---------- Router + App Shell ----------
+  function Shell(){
+    const [loading,setLoading]=useState(true);
+    useEffect(()=>{ const t=setTimeout(()=>setLoading(false),1000); return ()=>clearTimeout(t); },[]);
+    if(loading) return React.createElement(Splash);
+
+    return (
+      React.createElement(Fragment,null,
+        React.createElement(Header),
+        React.createElement(Routes,null,
+          React.createElement(Route,{path:"/", element: React.createElement(Fragment,null, React.createElement(Hero), React.createElement(Accueil))}),
+          React.createElement(Route,{path:"/ateliers", element: React.createElement(Ateliers)}),
+          React.createElement(Route,{path:"/evenements", element: React.createElement(Evenements)}),
+          React.createElement(Route,{path:"/contact", element: React.createElement(Contact)}),
+          React.createElement(Route,{path:"/mentions-legales", element: React.createElement(Mentions)})
+        ),
+        React.createElement(Footer)
+      )
+    );
+  }
+
+  // Mount
+  const root = createRoot(document.getElementById("root"));
+  root.render(
+    React.createElement(HashRouter,null, React.createElement(Shell))
+  );
+})();
+</script>
+</body>
+</html
+npm install -g vercel
