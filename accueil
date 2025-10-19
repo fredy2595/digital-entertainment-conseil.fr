@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nom de votre site — Accueil</title>
+  <meta name="description" content="Décrivez votre activité en une phrase accrocheuse." />
+  <meta property="og:title" content="Nom de votre site" />
+  <meta property="og:description" content="Décrivez votre activité en une phrase accrocheuse." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1220;          /* Arrière-plan principal */
+      --panel:#0f172a;       /* Cartes / sections */
+      --text:#e5e7eb;        /* Texte principal */
+      --muted:#94a3b8;       /* Texte secondaire */
+      --brand:#0ea5e9;       /* Couleur de marque */
+      --brand-2:#22d3ee;     /* Dégradé secondaire */
+      --accent:#10b981;      /* Accent (boutons secondaires) */
+      --ring:rgba(14,165,233,.45);
+      --radius:16px;
+      --shadow:0 10px 30px rgba(2,8,23,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+      background: radial-gradient(1200px 1200px at 80% -10%, rgba(34,211,238,.12), transparent 60%),
+                  radial-gradient(900px 900px at -10% 20%, rgba(14,165,233,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; height:auto; display:block}
+    .container{width:min(1100px, 92%); margin-inline:auto}
+    .pill{display:inline-flex; align-items:center; gap:.5rem; padding:.4rem .75rem; border-radius:999px; background:rgba(14,165,233,.12); border:1px solid rgba(14,165,233,.25); color:#e0f2fe; font-weight:600; font-size:.85rem}
+    .btn{display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 1.1rem; border-radius:calc(var(--radius) - 6px); font-weight:700; border:1px solid transparent; transition:.2s transform,.3s box-shadow}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:focus-visible{outline:3px solid var(--ring); outline-offset:2px}
+    .btn-primary{background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:white; box-shadow:var(--shadow)}
+    .btn-ghost{border-color:rgba(148,163,184,.25); background:rgba(148,163,184,.08); color:var(--text)}
+    .badge{display:inline-block; padding:.35rem .6rem; background:rgba(16,185,129,.16); color:#bbf7d0; border:1px solid rgba(16,185,129,.35); border-radius:8px; font-weight:600; font-size:.8rem}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(6px); background:rgba(2,6,23,.55); border-bottom:1px solid rgba(148,163,184,.12)}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:.9rem 0}
+    .brand{display:flex; align-items:center; gap:.7rem; font-weight:800}
+    .brand .logo{width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow:0 8px 20px rgba(34,211,238,.35)}
+    .nav a{font-weight:600; color:var(--muted)}
+    .menu{display:flex; gap:1rem; align-items:center}
+    .menu a:hover{color:#e2e8f0}
+    .mobile-toggle{display:none}
+
+    /* Hero */
+    .hero{padding:7rem 0 4rem}
+    .hero-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:2rem; align-items:center}
+    .headline{font-size: clamp(2rem, 4vw, 3.2rem); line-height:1.05; margin:0 0 1rem; font-weight:800}
+    .sub{font-size:1.1rem; color:var(--muted); max-width:52ch}
+    .cta{margin-top:1.6rem; display:flex; gap:1rem; flex-wrap:wrap}
+    .card{background:linear-gradient(180deg, rgba(148,163,184,.10), rgba(148,163,184,.04)); border:1px solid rgba(148,163,184,.18); border-radius:var(--radius); padding:1.25rem}
+    .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1.25rem}
+    .stat{padding:1rem; border-radius:12px; background:rgba(2,6,23,.35); border:1px solid rgba(148,163,184,.16)}
+    .stat b{font-size:1.4rem}
+
+    /* Sections */
+    section{padding:4rem 0}
+    .section-head{display:flex; align-items:end; justify-content:space-between; gap:1rem; margin-bottom:1.2rem}
+    h2{font-size: clamp(1.6rem, 3vw, 2.2rem); margin:0}
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem}
+    .feature{padding:1.1rem; border-radius:14px; background:var(--panel); border:1px solid rgba(148,163,184,.12)}
+    .feature h3{margin:.4rem 0 .2rem}
+    .feature p{color:var(--muted)}
+
+    .panel-lg{display:grid; grid-template-columns:1fr 1.1fr; gap:1.5rem; align-items:center}
+    .panel-lg .illustration{border-radius:var(--radius); overflow:hidden; border:1px solid rgba(148,163,184,.15)}
+
+    /* Témoignages */
+    .quotes{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem}
+    .quote{background:rgba(2,6,23,.35); border:1px solid rgba(148,163,184,.16); border-radius:14px; padding:1rem}
+    .quote cite{display:block; margin-top:.6rem; color:#bae6fd; font-style:normal; font-weight:600}
+
+    /* Prix */
+    .pricing{display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem}
+    .price-card{background:linear-gradient(180deg, rgba(148,163,184,.10), rgba(148,163,184,.05)); border:1px solid rgba(148,163,184,.18); border-radius:16px; padding:1.2rem}
+    .price-card h3{margin:.2rem 0}
+    .price{font-size:2rem; font-weight:800}
+    .price small{font-size:.9rem; color:var(--muted)}
+    .price-features{margin:.8rem 0; color:var(--muted)}
+
+    /* Contact */
+    .contact{display:grid; grid-template-columns:1.1fr 1fr; gap:1.2rem}
+    form{display:grid; gap:.9rem}
+    label{font-weight:600}
+    input, textarea{width:100%; padding:.85rem 1rem; border-radius:12px; border:1px solid rgba(148,163,184,.22); background:rgba(2,6,23,.35); color:var(--text)}
+    input:focus, textarea:focus{outline:3px solid var(--ring); border-color:transparent}
+
+    /* Footer */
+    footer{padding:2.4rem 0; border-top:1px solid rgba(148,163,184,.12); color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{padding:5rem 0 3rem}
+      .hero-grid{grid-template-columns:1fr; text-align:center}
+      .sub{margin-inline:auto}
+      .stats{grid-template-columns:repeat(3,1fr)}
+      .panel-lg{grid-template-columns:1fr}
+      .contact, .grid-3, .pricing, .quotes{grid-template-columns:1fr}
+      .menu{display:none}
+      .mobile-toggle{display:inline-flex; align-items:center; gap:.5rem; padding:.55rem .8rem; border-radius:10px; border:1px solid rgba(148,163,184,.18); background:rgba(2,6,23,.35); color:var(--text)}
+      .mobile-panel{display:none; position:absolute; top:60px; left:4%; right:4%; background:rgba(2,6,23,.96); border:1px solid rgba(148,163,184,.18); border-radius:12px; padding:1rem}
+      .mobile-panel a{display:block; padding:.8rem; border-radius:8px}
+      .mobile-panel a:hover{background:rgba(148,163,184,.08)}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav" aria-label="Barre de navigation">
+      <a class="brand" href="#accueil" aria-label="Aller à l'accueil">
+        <span class="logo" aria-hidden="true"></span>
+        <span>Nom de votre site</span>
+      </a>
+      <nav class="menu" aria-label="Navigation principale">
+        <a href="#services">Services</a>
+        <a href="#apropos">À propos</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#temoignages">Avis</a>
+        <a href="#contact" class="btn btn-ghost">Contact</a>
+      </nav>
+      <button class="mobile-toggle" aria-expanded="false" aria-controls="mobileNav">Menu</button>
+    </div>
+    <div id="mobileNav" class="container mobile-panel" role="dialog" aria-modal="false" aria-label="Menu mobile">
+      <a href="#services">Services</a>
+      <a href="#apropos">À propos</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#temoignages">Avis</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="accueil" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="pill">🚀 Votre succès en ligne commence ici</span>
+        <h1 class="headline">Titre accrocheur qui explique votre valeur en une phrase.</h1>
+        <p class="sub">Décrivez en 2–3 lignes ce que vous faites, pour qui, et le résultat que vos clients obtiennent. Soyez clair, concret et orienté bénéfices.</p>
+        <div class="cta">
+          <a href="#contact" class="btn btn-primary">Demander un devis</a>
+          <a href="#services" class="btn btn-ghost">Voir les services</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>+120</b><br><span class="muted">Clients accompagnés</span></div>
+          <div class="stat"><b>98%</b><br><span class="muted">Satisfaction</span></div>
+          <div class="stat"><b>24h</b><br><span class="muted">Réponse moyenne</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="badge">Aperçu</span>
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="Illustration de travail en équipe devant des laptops" />
+      </div>
+    </div>
+  </main>
+
+  <!-- Services / Features -->
+  <section id="services">
+    <div class="container">
+      <div class="section-head">
+        <h2>Nos services</h2>
+        <a class="btn btn-ghost" href="#contact">Obtenir un devis</a>
+      </div>
+      <div class="grid-3">
+        <article class="feature">
+          <span class="badge">N°1</span>
+          <h3>Service phare</h3>
+          <p>Détaillez la promesse, la méthode et l'impact pour vos clients. 2–3 phrases.</p>
+        </article>
+        <article class="feature">
+          <span class="badge">N°2</span>
+          <h3>Deuxième service</h3>
+          <p>Ce que comprend l'offre, délais classiques, critères de réussite, etc.</p>
+        </article>
+        <article class="feature">
+          <span class="badge">N°3</span>
+          <h3>Troisième service</h3>
+          <p>Ajoutez des éléments différenciants : support, garanties, expertise sectorielle…</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- A propos / Panel -->
+  <section id="apropos">
+    <div class="container panel-lg">
+      <div>
+        <h2>Pourquoi nous choisir</h2>
+        <p class="sub">Expliquez votre histoire, votre mission et votre approche. Mettez en avant des preuves : années d'expérience, certifications, partenaires, chiffres clés.</p>
+        <ul>
+          <li>✔️ Processus clair, de l'audit au déploiement</li>
+          <li>✔️ Accompagnement humain et réactif</li>
+          <li>✔️ Mesure des résultats et amélioration continue</li>
+        </ul>
+      </div>
+      <div class="illustration">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Collaboration autour d'un tableau" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Prix -->
+  <section id="tarifs">
+    <div class="container">
+      <div class="section-head">
+        <h2>Tarifs</h2>
+        <span class="muted">Des offres simples et transparentes</span>
+      </div>
+      <div class="pricing">
+        <div class="price-card">
+          <h3>Essentiel</h3>
+          <div class="price">299€ <small>/ projet</small></div>
+          <p class="price-features">✔️ 1 page • ✔️ Design prêt à l'emploi • ✔️ Support 7j/7</p>
+          <a href="#contact" class="btn btn-ghost">Choisir</a>
+        </div>
+        <div class="price-card" style="border-color:rgba(34,211,238,.6)">
+          <h3>Pro</h3>
+          <div class="price">799€ <small>/ projet</small></div>
+          <p class="price-features">✔️ 5 pages • ✔️ Personnalisation avancée • ✔️ SEO de base</p>
+          <a href="#contact" class="btn btn-primary">Choisir</a>
+        </div>
+        <div class="price-card">
+          <h3>Sur‑mesure</h3>
+          <div class="price">Sur devis</div>
+          <p class="price-features">✔️ Fonctionnalités spécifiques • ✔️ Intégrations • ✔️ Formation</p>
+          <a href="#contact" class="btn btn-ghost">Demander un devis</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages -->
+  <section id="temoignages">
+    <div class="container">
+      <div class="section-head">
+        <h2>Ils nous font confiance</h2>
+        <span class="muted">Quelques retours de nos clients</span>
+      </div>
+      <div class="quotes">
+        <figure class="quote">
+          <blockquote>“Service impeccable, résultats concrets. Notre visibilité a doublé.”</blockquote>
+          <cite>Camille, PME Tech</cite>
+        </figure>
+        <figure class="quote">
+          <blockquote>“Une équipe à l'écoute, force de proposition. Je recommande.”</blockquote>
+          <cite>Youssef, Artisan</cite>
+        </figure>
+        <figure class="quote">
+          <blockquote>“Livraison rapide et design moderne. Super expérience.”</blockquote>
+          <cite>Sara, Indépendante</cite>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container contact">
+      <div>
+        <h2>Parlons de votre projet</h2>
+        <p class="sub">Remplissez le formulaire et nous vous répondons sous 24h.</p>
+        <div class="card">
+          <p class="muted">📩 Vous pouvez aussi nous écrire à <a href="mailto:contact@exemple.com">contact@exemple.com</a></p>
+        </div>
+      </div>
+      <form id="contactForm" aria-label="Formulaire de contact">
+        <div>
+          <label for="name">Nom</label>
+          <input id="name" name="name" autocomplete="name" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Envoyer</button>
+        <p id="formStatus" class="muted" role="status" aria-live="polite" style="margin:.4rem 0 0"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap">
+      <span>© <span id="year"></span> Nom de votre site</span>
+      <nav aria-label="Liens légaux" style="display:flex; gap:1rem">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+        <a href="#">CGU</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menu mobile
+    const toggle = document.querySelector('.mobile-toggle');
+    const panel = document.getElementById('mobileNav');
+    toggle?.addEventListener('click', () => {
+      const open = panel.style.display === 'block';
+      panel.style.display = open ? 'none' : 'block';
+      toggle.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Formulaire (démo front uniquement)
+    const form = document.getElementById('contactForm');
+    const statusEl = document.getElementById('formStatus');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = 'Envoi en cours…';
+      // Simulez un appel API — à remplacer par votre backend
+      await new Promise(r => setTimeout(r, 700));
+      statusEl.textContent = 'Merci ! Votre message a bien été envoyé.';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
